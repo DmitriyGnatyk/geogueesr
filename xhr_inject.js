@@ -32,3 +32,20 @@ window.fetch = async (...args) => {
     window.postMessage({ type: 'fetch', data: clonedResponse }, '*');
     return response;
 };
+
+// ---- Слухач для профільного запиту ----
+window.addEventListener('message', (e) => {
+    const msg = e.data;
+    if (!msg || !msg.url) return;
+
+    if (msg.url.includes("https://www.geoguessr.com/api/v3/profiles/")) {
+        console.log("✅ Отримано профіль користувача!");
+        const mapContainer = document.querySelector("#mapContainer");
+        if (mapContainer && !document.querySelector("#mapInfo")) {
+            const info = document.createElement("div");
+            info.id = "mapInfo";
+            info.innerHTML = '<div class="spinner"></div>';
+            mapContainer.appendChild(info);
+        }
+    }
+});
