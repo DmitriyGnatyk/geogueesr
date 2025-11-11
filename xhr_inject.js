@@ -33,7 +33,6 @@ window.fetch = async (...args) => {
     return response;
 };
 
-// ---- Слухач для профільного запиту ----
 window.addEventListener('message', (e) => {
     const msg = e.data;
     if (!msg || !msg.url) return;
