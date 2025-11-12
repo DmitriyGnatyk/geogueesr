@@ -59,9 +59,6 @@ window.addEventListener('message', (e) => {
             info.id = "mapInfo";
             info.innerHTML = '<div class="spinner"></div>';
             mapContainer.appendChild(info);
-
-            // автохайд через 2 секунди
-            setTimeout(() => info.remove(), 2000);
         }
     }
 });
