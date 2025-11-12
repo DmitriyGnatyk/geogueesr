@@ -12,11 +12,23 @@
     XHR.send = function (postData) {
         this.addEventListener('load', function () {
             try {
+                let safeData;
+
+                // 🧠 Якщо response — ArrayBuffer, декодуємо його в текст
+                if (this.response instanceof ArrayBuffer) {
+                    safeData = new TextDecoder().decode(this.response);
+                } else if (this.response && typeof this.response !== 'string') {
+                    // Якщо це об'єкт (наприклад JSON)
+                    safeData = JSON.stringify(this.response);
+                } else {
+                    safeData = this.response;
+                }
+
                 window.postMessage({
                     type: 'xhr',
-                    url: this._url, // ✅ додаємо URL
+                    url: this._url,
                     method: this._method,
-                    data: this.response
+                    data: safeData
                 }, '*');
             } catch (e) {
                 console.error('XHR postMessage error:', e);
@@ -35,7 +47,7 @@ window.fetch = async (...args) => {
         const clonedResponse = await response.clone().text();
         window.postMessage({
             type: 'fetch',
-            url, // ✅ додаємо URL
+            url,
             data: clonedResponse
         }, '*');
     } catch (e) {
